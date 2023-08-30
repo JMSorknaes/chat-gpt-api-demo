@@ -12,18 +12,18 @@ import { QuoteData } from '../shakespeare-quote.service';
     <ng-container *ngIf="quote != null">
       <mat-card-header>
         <mat-card-title
-          >{{ quote.play }}, {{ quote.act }}, {{ quote.scene }}</mat-card-title
+          > {{ quote.charName }} ({{ quote.charCurrentHp }}) vs. {{ quote.monsterName }} ({{ quote.monsterCurrentHp }})</mat-card-title
         >
         <mat-card-subtitle>
           <span
-            >In the style of a {{ style }}. Original:
-            {{ quote.originalQuote }}</span
+            >In a battle to the death!
+            </span
           >
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <mat-divider class="my-5"></mat-divider>
-        <p class="text-lg">{{ quote.styledQuote }}</p>
+        <p class="text-lg">{{  quote.lastRound }}</p>
       </mat-card-content>
     </ng-container>
   `,

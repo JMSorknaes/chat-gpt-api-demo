@@ -3,11 +3,11 @@ import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from 'openai';
 import { environment } from 'src/environments/environment';
 
 export type QuoteData = {
-  styledQuote: string;
-  originalQuote: string;
-  play: string;
-  act: string;
-  scene: string;
+  charCurrentHp: string;
+  monsterCurrentHp: string;
+  charName: string;
+  monsterName: string;
+  lastRound: string;
 };
 
 @Injectable({
@@ -36,13 +36,13 @@ export class ShakespeareQuoteService {
       messages = [
         {
           role: 'system',
-          content: `You will be asked for random quotes from the works of Shakespeare. You change the quote as if it was given by a ${style}. You don't use the quote 'To be or not to be'`,
+          content: `You will simulate a Dungeons and Dragons battle, with a random named monster fighting a ${style}, starting with roll for initiative. Give a summary of the combat round, with dice rolls and modifiers.`,
         },
-        { role: 'user', content: `Give me a random shakespeare quote. Your response should be in JSON format {styledQuote: string, originalQuote: string, play: string, act: string, scene: string}` },
+        { role: 'user', content: `Simulate a Dungeons and Dragons battle. Your response should be in JSON format {charCurrentHp: string, monsterCurrentHp: string, charName: string, monsterName: string, lastRound: string}` },
       ];
       this.shakespeareQuoteContext.set(messages);
     } else {
-      const prompt: ChatCompletionRequestMessage = {role: 'user', content: 'Give me the next quote in the scene'};
+      const prompt: ChatCompletionRequestMessage = {role: 'user', content: 'Continue the fight.'};
       this.shakespeareQuoteContext.mutate(context => context.push(prompt));
       messages = this.shakespeareQuoteContext();
     }
@@ -52,7 +52,7 @@ export class ShakespeareQuoteService {
         model: 'gpt-4',
         messages: messages,
         temperature: 1,
-        max_tokens: 3000,
+        max_tokens: 5000,
       })
       .then((res) => {
         const content = res.data.choices[0].message?.content;
